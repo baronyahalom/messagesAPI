@@ -1,6 +1,6 @@
 messages API 
 
-Created with nodeJS express. 
+Created with nodeJS express, and data saved in MongoDB. 
 
 link - https://messagesherolo.herokuapp.com/
 
