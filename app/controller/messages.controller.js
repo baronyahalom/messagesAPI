@@ -2,7 +2,7 @@ const db = require("../models");
 const msg_send = db.messagesSender;
 const msg_receive = db.messagesReceiver;
 
-
+//creating and saving new msg
 exports.create = (req, res) => {
     console.log("writing new message");
     // Validate request
@@ -54,8 +54,9 @@ exports.create = (req, res) => {
 
 };
 
+
+// read all messages that user received
 exports.readAll = (req, res) => {
-    console.log("reading all messages from user: req.params.user");
     const userID = req.params.user;
     let receiver = { receiver: { $regex: new RegExp(userID), $options: "i" } };
 
@@ -72,6 +73,7 @@ exports.readAll = (req, res) => {
 
 };
 
+// get all unread messages that user receives
 exports.getUnread = (req, res) => {
     console.log("Getting all unread messages from user: " + req.params.user);
     const userID = req.params.user;
@@ -79,6 +81,7 @@ exports.getUnread = (req, res) => {
     let unreadMessages = [];
     msg_receive.find(receiver)
         .then(data => {
+            //get only the messages user receive and didn't read
             Object.keys(data).forEach(function(k){
                 if(data[k].status === "receive")
                     unreadMessages.push(data[k]);
@@ -97,15 +100,16 @@ exports.getUnread = (req, res) => {
 
 };
 
+//read specific msg
 exports.readOne = (req, res) => {
     console.log("read messages from user: " + req.params.user);
-    console.log(req.params);
     const userID = req.params.user;
     const msg = req.params.msgID;
-
+    /// find msg by ID
     msg_receive.findById(msg)
         .then(data => {
             console.log(data.sender)
+            // find user and check if he didn't read the msg
             if( data.receiver === userID && data.status === "receive"){
                 msg_receive.findByIdAndUpdate(msg, {"status" : "read"},  { useFindAndModify: false })
                     .then(dddd => {
@@ -130,11 +134,12 @@ exports.readOne = (req, res) => {
 
 };
 
+//delete specific msg
 exports.deleteMsg = (req, res) => {
     console.log("delete messages from user: " + req.params.user);
     const userID = req.params.user;
     const msg = req.params.msgID;
-
+    //check if delete from receiver
     msg_receive.findById(msg)
         .then(data => {
             if(data != null && data.receiver === userID){
@@ -149,6 +154,7 @@ exports.deleteMsg = (req, res) => {
                         });
                     });
             }
+            //check if delete from sender
             else
             {
                 msg_send.findById(msg)
@@ -184,6 +190,7 @@ exports.deleteMsg = (req, res) => {
         });
 
 };
+
 
 
 

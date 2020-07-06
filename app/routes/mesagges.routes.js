@@ -1,9 +1,8 @@
+// all the routs for the application
+
 module.exports = app => {
     const message = require("../controller/messages.controller.js");
-
-    var router = require("express").Router();
-
-
+    const router = require("express").Router();
     router.post("/new_message", message.create);
     router.get("/read_all/:user", message.readAll);
     router.get("/get_all_unread/:user", message.getUnread);

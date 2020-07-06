@@ -1,3 +1,4 @@
+//collection for sending msg
 module.exports = mongoose => {
     const message_sender = mongoose.model(
         "all_messages_sender",

@@ -1,3 +1,5 @@
+
+//collection for receiving msg
 module.exports = mongoose => {
     const message_receiver = mongoose.model(
         "all_messages_receiver",
